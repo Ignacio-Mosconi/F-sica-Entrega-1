@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class TankShooting : MonoBehaviour
 {
@@ -12,19 +13,50 @@ public class TankShooting : MonoBehaviour
     float currentProjectileSpeed;
     float currentAimingAngle;
 
+    UnityEvent onSpeedChange = new UnityEvent();
+    UnityEvent onAngleChange = new UnityEvent();
+
     void Update()
     {
         if (!Input.GetButton("Adjust Angle Modifier"))
         {
             float speedAdjustment = Input.GetAxis("Mouse ScrollWheel");
-            float newSpeed = currentProjectileSpeed + speedAdjustment * speedAdjustmentIntervals; 
+            float newSpeed = currentProjectileSpeed + speedAdjustment * speedAdjustmentIntervals;
+            float previousSpeed = currentProjectileSpeed;
+            
             currentProjectileSpeed = Mathf.Clamp(newSpeed, minProjectileSpeed, maxProjectileSpeed);
+            if (currentProjectileSpeed != previousSpeed)
+                onSpeedChange.Invoke();
         }
         else
         {
             float angleAdjustment = Input.GetAxis("Mouse ScrollWheel");
-            float newAngle = currentAimingAngle + angleAdjustment * angleAdjustmentIntervals; 
+            float newAngle = currentAimingAngle + angleAdjustment * angleAdjustmentIntervals;
+            float previousAngle = currentAimingAngle;
             currentAimingAngle = Mathf.Clamp(newAngle, minAimingAngle, maxAimingAngle);
-        }  
+
+            if (currentAimingAngle != previousAngle)
+                onAngleChange.Invoke();
+        }
+    }
+
+    public float CurrentProjectileSpeed
+    {
+        get { return currentProjectileSpeed; }
+    }
+
+    public float CurrentAimingAngle
+    {
+        get { return currentAimingAngle; }
+    }
+
+    public UnityEvent OnSpeedChange
+    {
+        get { return onSpeedChange; }
+    }
+
+    public UnityEvent OnAngleChange
+    {
+        get { return onAngleChange; }
     }
 }

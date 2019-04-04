@@ -53,6 +53,18 @@ public class TurnManager : MonoBehaviour
         tank2Shooting.enabled = !tank2Shooting.enabled;
     }
 
+    public TankShooting GetActiveTankShooting()
+    {
+        TankShooting activeTankShooting;
+        
+        if (tank1Shooting.enabled)
+            activeTankShooting = tank1Shooting;
+        else
+            activeTankShooting = tank2Shooting;
+
+        return activeTankShooting;
+    } 
+
     public static TurnManager Instance
     {
         get
