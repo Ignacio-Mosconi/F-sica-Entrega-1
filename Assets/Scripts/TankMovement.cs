@@ -6,8 +6,9 @@ public class TankMovement : MonoBehaviour
 
     void Update()
     {
-        float horizontalMovement = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalMovement = horizontalInput * speed * Time.deltaTime;
 
-        transform.Translate(horizontalMovement * Time.deltaTime, 0f, 0f);
+        transform.Translate(horizontalMovement, 0f, 0f);
     }
 }

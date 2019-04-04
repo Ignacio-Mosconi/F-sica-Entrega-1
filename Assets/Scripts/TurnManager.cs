@@ -10,6 +10,8 @@ public class TurnManager : MonoBehaviour
 
     TankMovement tank1Movement;
     TankMovement tank2Movement;
+    TankShooting tank1Shooting;
+    TankShooting tank2Shooting;
     float turnTime; 
 
     void Awake()
@@ -24,16 +26,18 @@ public class TurnManager : MonoBehaviour
         
         tank1Movement = tank1.GetComponent<TankMovement>();
         tank2Movement = tank2.GetComponent<TankMovement>();
+        tank1Shooting = tank1.GetComponent<TankShooting>();
+        tank2Shooting = tank2.GetComponent<TankShooting>();
 
         tank1Movement.enabled = true;
         tank2Movement.enabled = false;
+        tank1Shooting.enabled = true;
+        tank2Shooting.enabled = false;
     }
 
     void Update()
     {
         turnTime -= Time.deltaTime;
-
-        Debug.Log(turnTime);
 
         if (turnTime <= 0f)
             ChangeTurns();
@@ -45,6 +49,8 @@ public class TurnManager : MonoBehaviour
 
         tank1Movement.enabled = !tank1Movement.enabled;
         tank2Movement.enabled = !tank2Movement.enabled;
+        tank1Shooting.enabled = !tank1Shooting.enabled;
+        tank2Shooting.enabled = !tank2Shooting.enabled;
     }
 
     public static TurnManager Instance
