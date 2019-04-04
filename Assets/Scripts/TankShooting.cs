@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 public class TankShooting : MonoBehaviour
 {
+    [SerializeField] Transform cannonAxis;
     [SerializeField] float minProjectileSpeed = 10f;
     [SerializeField] float maxProjectileSpeed = 20f;
     [SerializeField] float minAimingAngle = 0f;
@@ -34,6 +35,8 @@ public class TankShooting : MonoBehaviour
             float newAngle = currentAimingAngle + angleAdjustment * angleAdjustmentIntervals;
             float previousAngle = currentAimingAngle;
             currentAimingAngle = Mathf.Clamp(newAngle, minAimingAngle, maxAimingAngle);
+
+            cannonAxis.Rotate(0f, 0f, Mathf.Deg2Rad * (currentAimingAngle - previousAngle));
 
             if (currentAimingAngle != previousAngle)
                 onAngleChange.Invoke();
