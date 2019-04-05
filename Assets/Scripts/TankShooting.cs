@@ -8,8 +8,6 @@ public class TankShooting : MonoBehaviour
     [SerializeField] float maxProjectileSpeed = 20f;
     [SerializeField] float minAimingAngle = 0f;
     [SerializeField] float maxAimingAngle = 180f;
-    [SerializeField] float speedAdjustmentIntervals = 2f;
-    [SerializeField] float angleAdjustmentIntervals = 15f;
 
     float currentProjectileSpeed;
     float currentAimingAngle;
@@ -17,22 +15,29 @@ public class TankShooting : MonoBehaviour
     UnityEvent onSpeedChange = new UnityEvent();
     UnityEvent onAngleChange = new UnityEvent();
 
+    void Awake()
+    {
+        currentProjectileSpeed = (minProjectileSpeed + maxProjectileSpeed) * 0.5f;
+        currentAimingAngle = (minAimingAngle + maxAimingAngle) * 0.5f;
+    }
+
     void Update()
     {
-        if (!Input.GetButton("Adjust Angle Modifier"))
+        if (Input.GetButton("Adjust Speed Modifier") && !Input.GetButton("Adjust Angle Modifier"))
         {
             float speedAdjustment = Input.GetAxis("Mouse ScrollWheel");
-            float newSpeed = currentProjectileSpeed + speedAdjustment * speedAdjustmentIntervals;
+            float newSpeed = currentProjectileSpeed + speedAdjustment * Mathf.Abs(speedAdjustment * 100f);
             float previousSpeed = currentProjectileSpeed;
             
             currentProjectileSpeed = Mathf.Clamp(newSpeed, minProjectileSpeed, maxProjectileSpeed);
             if (currentProjectileSpeed != previousSpeed)
                 onSpeedChange.Invoke();
         }
-        else
+        
+        if (Input.GetButton("Adjust Angle Modifier") && !Input.GetButton("Adjust Speed Modifier"))
         {
             float angleAdjustment = Input.GetAxis("Mouse ScrollWheel");
-            float newAngle = currentAimingAngle + angleAdjustment * angleAdjustmentIntervals;
+            float newAngle = currentAimingAngle + angleAdjustment * Mathf.Abs(angleAdjustment * 100f);
             float previousAngle = currentAimingAngle;
             currentAimingAngle = Mathf.Clamp(newAngle, minAimingAngle, maxAimingAngle);
 

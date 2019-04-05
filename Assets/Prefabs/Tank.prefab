@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8952769004658926199}
   m_Layer: 0
-  m_Name: Cannon Axis
+  m_Name: Cannon Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,4 +143,4 @@ MonoBehaviour:
   minAimingAngle: 0
   maxAimingAngle: 180
   speedAdjustmentIntervals: 2
-  angleAdjustmentIntervals: 15
+  angleAdjustmentIntervals: 20
