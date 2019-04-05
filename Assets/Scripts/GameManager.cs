@@ -82,6 +82,11 @@ public class GameManager : MonoBehaviour
         return activeTank;
     }
 
+    public float TurnTime
+    {
+        get { return turnTime; }
+    }
+
     public Tank[] Tanks
     {
         get { return tanks; }

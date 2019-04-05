@@ -5,6 +5,7 @@ public class HUD : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI[] projectileSpeedTexts;
     [SerializeField] TextMeshProUGUI[] aimingAngleTexts;
+    [SerializeField] TextMeshProUGUI timeText;
 
     void Start()
     {
@@ -16,6 +17,11 @@ public class HUD : MonoBehaviour
             tank.shooting.OnSpeedChange.AddListener(ChangeSpeedText);
             tank.shooting.OnAngleChange.AddListener(ChangeAngleText);
         }
+    }
+
+    void Update()
+    {
+        timeText.text = ((int)(GameManager.Instance.TurnTime)).ToString();
     }
 
     void ChangeSpeedText()
