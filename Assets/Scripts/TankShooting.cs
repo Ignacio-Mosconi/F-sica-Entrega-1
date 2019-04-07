@@ -3,11 +3,11 @@ using UnityEngine.Events;
 
 public class TankShooting : MonoBehaviour
 {
-    [SerializeField] Transform cannonAxis;
-    [SerializeField] float minProjectileSpeed = 10f;
-    [SerializeField] float maxProjectileSpeed = 20f;
-    [SerializeField] float minAimingAngle = 0f;
-    [SerializeField] float maxAimingAngle = 180f;
+    [SerializeField] Transform cannon;
+    [SerializeField] [Range(10f, 15f)] float minProjectileSpeed = 10f;
+    [SerializeField] [Range(20f, 25f)] float maxProjectileSpeed = 25f;
+    [SerializeField] [Range(-180f, 0f)] float minAimingAngle = 0f;
+    [SerializeField] [Range(0f, 180f)] float maxAimingAngle = 180f;
 
     float currentProjectileSpeed;
     float currentAimingAngle;
@@ -17,8 +17,8 @@ public class TankShooting : MonoBehaviour
 
     void Awake()
     {
-        currentProjectileSpeed = (minProjectileSpeed + maxProjectileSpeed) * 0.5f;
-        currentAimingAngle = (minAimingAngle + maxAimingAngle) * 0.5f;
+        currentAimingAngle = cannon.rotation.z;
+        currentProjectileSpeed = minProjectileSpeed;
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class TankShooting : MonoBehaviour
             float previousAngle = currentAimingAngle;
             currentAimingAngle = Mathf.Clamp(newAngle, minAimingAngle, maxAimingAngle);
 
-            cannonAxis.Rotate(0f, 0f, Mathf.Deg2Rad * (currentAimingAngle - previousAngle));
+            cannon.Rotate(0f, 0f, currentAimingAngle - previousAngle);
 
             if (currentAimingAngle != previousAngle)
                 onAngleChange.Invoke();
@@ -55,7 +55,7 @@ public class TankShooting : MonoBehaviour
 
     public float CurrentAimingAngle
     {
-        get { return currentAimingAngle; }
+        get { return Mathf.Abs(currentAimingAngle); }
     }
 
     public UnityEvent OnSpeedChange
