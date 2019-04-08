@@ -1,14 +1,23 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class TankShooting : MonoBehaviour
 {
-    [SerializeField] Transform cannon;
-    [SerializeField] [Range(10f, 15f)] float minProjectileSpeed = 10f;
-    [SerializeField] [Range(20f, 25f)] float maxProjectileSpeed = 25f;
-    [SerializeField] [Range(-180f, 0f)] float minAimingAngle = 0f;
-    [SerializeField] [Range(0f, 180f)] float maxAimingAngle = 180f;
+    enum CannonFacing
+    {
+        Left, Right
+    }
 
+    [SerializeField] Transform cannon;
+    [SerializeField] GameObject cannonBall;
+    [SerializeField] CannonFacing cannonFacing;
+    [SerializeField] [Range(10f, 15f)] float minProjectileSpeed = 10f;
+    [SerializeField] [Range(25f, 30f)] float maxProjectileSpeed = 30f;
+    [SerializeField] [Range(0f, 90f)] float minAimingAngle = 0f;
+    [SerializeField] [Range(135f, 180f)] float maxAimingAngle = 180f;
+
+    bool hasFiredThisTurn = false;
     float currentProjectileSpeed;
     float currentAimingAngle;
 
@@ -24,28 +33,84 @@ public class TankShooting : MonoBehaviour
     void Update()
     {
         if (Input.GetButton("Adjust Speed Modifier") && !Input.GetButton("Adjust Angle Modifier"))
-        {
-            float speedAdjustment = Input.GetAxis("Mouse ScrollWheel");
-            float newSpeed = currentProjectileSpeed + speedAdjustment * Mathf.Abs(speedAdjustment * 100f);
-            float previousSpeed = currentProjectileSpeed;
-            
-            currentProjectileSpeed = Mathf.Clamp(newSpeed, minProjectileSpeed, maxProjectileSpeed);
-            if (currentProjectileSpeed != previousSpeed)
-                onSpeedChange.Invoke();
-        }
-        
+            AdjustProjectileSpeed();
         if (Input.GetButton("Adjust Angle Modifier") && !Input.GetButton("Adjust Speed Modifier"))
-        {
-            float angleAdjustment = Input.GetAxis("Mouse ScrollWheel");
-            float newAngle = currentAimingAngle + angleAdjustment * Mathf.Abs(angleAdjustment * 100f);
-            float previousAngle = currentAimingAngle;
-            currentAimingAngle = Mathf.Clamp(newAngle, minAimingAngle, maxAimingAngle);
+            AdjustAimingAngle();
+        
+        if (Input.GetButton("Fire") && !hasFiredThisTurn)
+            LaunchProjectile();
+    }
 
+    void AdjustProjectileSpeed()
+    {
+        float speedAdjustment = Input.GetAxis("Mouse ScrollWheel");
+        float newSpeed = currentProjectileSpeed + speedAdjustment * Mathf.Abs(speedAdjustment * 100f);
+        float previousSpeed = currentProjectileSpeed;
+
+        currentProjectileSpeed = Mathf.Clamp(newSpeed, minProjectileSpeed, maxProjectileSpeed);
+        if (currentProjectileSpeed != previousSpeed)
+            onSpeedChange.Invoke();
+    }
+
+    void AdjustAimingAngle()
+    {   
+        float angleAdjustment = Input.GetAxis("Mouse ScrollWheel");
+        float newAngle = currentAimingAngle + angleAdjustment * Mathf.Abs(angleAdjustment * 100f);
+        float previousAngle = currentAimingAngle;
+        currentAimingAngle = Mathf.Clamp(newAngle, minAimingAngle, maxAimingAngle);
+
+        if (cannonFacing == CannonFacing.Right)
             cannon.Rotate(0f, 0f, currentAimingAngle - previousAngle);
+        else
+            cannon.Rotate(0f, 0f, -(currentAimingAngle - previousAngle));
 
-            if (currentAimingAngle != previousAngle)
-                onAngleChange.Invoke();
+        if (currentAimingAngle != previousAngle)
+            onAngleChange.Invoke();
+    }
+
+    void LaunchProjectile()
+    {
+        float projectileSpeed = (cannonFacing == CannonFacing.Right) ? currentProjectileSpeed : -currentProjectileSpeed;
+        float aimingAngle = (cannonFacing == CannonFacing.Right) ? currentAimingAngle : -currentAimingAngle;
+
+        hasFiredThisTurn = true;
+
+        StartCoroutine(ComputeProjectileTrajectory(projectileSpeed, aimingAngle, Physics2D.gravity.y));
+    }
+
+    IEnumerator ComputeProjectileTrajectory(float speed, float angle, float gravity)
+    {
+        float time = 0f;
+        bool traveling = true;
+        float initialSpeedX = speed * Mathf.Cos(angle * Mathf.Deg2Rad);
+        float initialSpeedY = speed * Mathf.Sin(angle * Mathf.Deg2Rad);
+        float initialPosX = cannonBall.transform.position.x;
+        float initialPosY = cannonBall.transform.position.y;
+
+        cannonBall.SetActive(true);
+
+        while (traveling)
+        {
+            time += Time.deltaTime;
+
+            float posx = initialSpeedX * time + initialPosX;
+            float posY = (gravity * time * time) * 0.5f + initialSpeedY * time + initialPosY;
+
+            cannonBall.transform.position = new Vector3(posx, posY, cannonBall.transform.position.z);
+
+            if (time >= 2.5f)
+                traveling = false;
+
+            yield return null;
         }
+
+        cannonBall.SetActive(false);
+        cannonBall.transform.position = cannonBall.transform.parent.position;
+    }
+
+    public bool HasFiredThisTurn
+    {
+        set { hasFiredThisTurn = value; }
     }
 
     public float CurrentProjectileSpeed
@@ -55,7 +120,7 @@ public class TankShooting : MonoBehaviour
 
     public float CurrentAimingAngle
     {
-        get { return Mathf.Abs(currentAimingAngle); }
+        get { return currentAimingAngle; }
     }
 
     public UnityEvent OnSpeedChange

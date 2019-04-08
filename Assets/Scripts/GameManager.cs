@@ -63,6 +63,9 @@ public class GameManager : MonoBehaviour
         {
             tank.movement.enabled = !tank.movement.enabled;
             tank.shooting.enabled = !tank.shooting.enabled;
+
+            if (tank.shooting.enabled)
+                tank.shooting.HasFiredThisTurn = false;
         }
     }
 

@@ -90,13 +90,23 @@ PrefabInstance:
     - target: {fileID: 2281295603741301071, guid: 97ff08bc34ca20b428558a3a31f342f1,
         type: 3}
       propertyPath: minAimingAngle
-      value: -180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2281295603741301071, guid: 97ff08bc34ca20b428558a3a31f342f1,
         type: 3}
       propertyPath: maxAimingAngle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2281295603741301071, guid: 97ff08bc34ca20b428558a3a31f342f1,
+        type: 3}
+      propertyPath: cannonFacing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2281295603741301071, guid: 97ff08bc34ca20b428558a3a31f342f1,
+        type: 3}
+      propertyPath: cannonBall
+      value: 
+      objectReference: {fileID: 1333035602331224366}
     - target: {fileID: 8952769004658926199, guid: 97ff08bc34ca20b428558a3a31f342f1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -127,11 +137,27 @@ PrefabInstance:
       propertyPath: m_FlipY
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2562511631480697490, guid: 97ff08bc34ca20b428558a3a31f342f1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7346034196229575082, guid: 97ff08bc34ca20b428558a3a31f342f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97ff08bc34ca20b428558a3a31f342f1, type: 3}
 --- !u!4 &843052768294255347 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8952769004658926199, guid: 97ff08bc34ca20b428558a3a31f342f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 8614752766243641476}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1333035602331224366 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7346034196229575082, guid: 97ff08bc34ca20b428558a3a31f342f1,
     type: 3}
   m_PrefabInstance: {fileID: 8614752766243641476}
   m_PrefabAsset: {fileID: 0}
