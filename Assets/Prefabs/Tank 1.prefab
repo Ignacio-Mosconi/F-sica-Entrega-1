@@ -97,8 +97,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2013774791
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: f18c45a53fcffce46adf7bc544eb2e60, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 6918085904589963101}
   - component: {fileID: 6918085904589963103}
   - component: {fileID: 2281295603741301071}
+  - component: {fileID: 8101784093561985203}
   m_Layer: 0
   m_Name: Tank 1
   m_TagString: Untagged
@@ -179,8 +180,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2013774791
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ffd2b6739895a2c47acf4d51b2728e98, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -225,6 +226,23 @@ MonoBehaviour:
   maxProjectileSpeed: 30
   minAimingAngle: 0
   maxAimingAngle: 180
+--- !u!114 &8101784093561985203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6918085904589963100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e33135e12dd06004284ffa0af5c36d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCollision:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &7346034196229575082
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,9 +308,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 1294404479
+  m_SortingLayer: 3
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c652e9ac00085134bbc55c01b3b43656, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
