@@ -238,11 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e33135e12dd06004284ffa0af5c36d11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnCollision:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  mass: 1000
 --- !u!1 &7346034196229575082
 GameObject:
   m_ObjectHideFlags: 0

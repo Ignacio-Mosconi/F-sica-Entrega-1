@@ -55,8 +55,27 @@ public class CollisionManager : MonoBehaviour
 
                                 if (deltaX < minDistX && deltaY < minDistY)
                                 {
-                                    boxA.OnCollision.Invoke();
-                                    boxB.OnCollision.Invoke();
+                                    Vector2 normalA = Vector2.zero;
+                                    Vector2 normalB = Vector2.zero;
+                                    float horPenetration = minDistX - deltaX;
+                                    float verPenetration = minDistY - deltaY;
+                                    float distanceToMove = Mathf.Min(horPenetration, verPenetration);
+
+                                    if (horPenetration > verPenetration)
+                                    {
+                                        normalB.x = normalA.x = 0f;
+                                        normalB.y = (diff.y > 0f) ? 1f : -1f;
+                                        normalA.y = -normalB.y;
+                                    }
+                                    else
+                                    {
+                                        normalB.y = normalA.y = 0f;
+                                        normalB.x = (diff.x > 0f) ? 1f : -1f;
+                                        normalA.x = -normalB.x;
+                                    }
+                        
+                                    boxA.OnCollision.Invoke(boxB, normalA, distanceToMove);
+                                    boxB.OnCollision.Invoke(boxA, normalB, distanceToMove);
                                 }
                             }
                         }
