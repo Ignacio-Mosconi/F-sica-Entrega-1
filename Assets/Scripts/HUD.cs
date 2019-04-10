@@ -26,7 +26,7 @@ public class HUD : MonoBehaviour
 
     void ChangeSpeedText()
     {
-        Tank activeTank = GameManager.Instance.GetActiveTank();
+        Tank activeTank = GameManager.Instance.ActiveTank;
         TankShooting activeTankShooting = activeTank.shooting;
         int activeTankIndex = activeTank.index;
         int speedValue = (int)activeTankShooting.CurrentProjectileSpeed;
@@ -36,7 +36,7 @@ public class HUD : MonoBehaviour
 
     void ChangeAngleText()
     {
-        Tank activeTank = GameManager.Instance.GetActiveTank();
+        Tank activeTank = GameManager.Instance.ActiveTank;
         TankShooting activeTankShooting = activeTank.shooting;
         int activeTankIndex = activeTank.index;
         int angleValue = (int)activeTankShooting.CurrentAimingAngle;

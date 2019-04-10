@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(CustomBoxCollider2D))]
 public class TankShooting : MonoBehaviour
 {
     enum CannonFacing
@@ -10,23 +11,27 @@ public class TankShooting : MonoBehaviour
     }
 
     [SerializeField] Transform cannon;
+    [SerializeField] CustomBoxCollider2D boxCollider;
     [SerializeField] GameObject cannonBall;
     [SerializeField] CannonFacing cannonFacing;
     [SerializeField] [Range(10f, 15f)] float minProjectileSpeed = 10f;
     [SerializeField] [Range(25f, 30f)] float maxProjectileSpeed = 30f;
     [SerializeField] [Range(0f, 90f)] float minAimingAngle = 0f;
     [SerializeField] [Range(135f, 180f)] float maxAimingAngle = 180f;
+    [SerializeField] [Range(5f, 10f)] float shotDuration = 5f;
 
     CustomCircleCollider2D cannonBallCollider;
-    bool hasFiredThisTurn = false;
+    bool isFiring = false;
     float currentProjectileSpeed;
     float currentAimingAngle;
 
     UnityEvent onSpeedChange = new UnityEvent();
     UnityEvent onAngleChange = new UnityEvent();
+    UnityEvent onFireFinish = new UnityEvent();
 
     void Awake()
     {
+        boxCollider = GetComponent<CustomBoxCollider2D>();
         cannonBallCollider = cannonBall.GetComponent<CustomCircleCollider2D>();
         currentAimingAngle = cannon.rotation.z;
         currentProjectileSpeed = minProjectileSpeed;
@@ -42,7 +47,7 @@ public class TankShooting : MonoBehaviour
         if (Input.GetButton("Adjust Angle Modifier") && !Input.GetButton("Adjust Speed Modifier"))
             AdjustAimingAngle();
         
-        if (Input.GetButton("Fire") && !hasFiredThisTurn)
+        if (Input.GetButton("Fire") && !isFiring)
             LaunchProjectile();
     }
 
@@ -78,9 +83,17 @@ public class TankShooting : MonoBehaviour
         float projectileSpeed = (cannonFacing == CannonFacing.Right) ? currentProjectileSpeed : -currentProjectileSpeed;
         float aimingAngle = (cannonFacing == CannonFacing.Right) ? currentAimingAngle : -currentAimingAngle;
 
-        hasFiredThisTurn = true;
+        ResetCannonBall();
+        isFiring = true;
 
         StartCoroutine(ComputeProjectileTrajectory(projectileSpeed, aimingAngle, Physics2D.gravity.y));
+    }
+
+    void ResetCannonBall()
+    {
+        cannonBall.SetActive(false);
+        cannonBallCollider.CollisionEnabled = false;
+        cannonBall.transform.position = cannonBall.transform.parent.position;
     }
 
     IEnumerator ComputeProjectileTrajectory(float speed, float angle, float gravity)
@@ -104,26 +117,30 @@ public class TankShooting : MonoBehaviour
 
             cannonBall.transform.position = new Vector3(posx, posY, cannonBall.transform.position.z);
 
-            if (time >= 2.5f)
+            if (time > shotDuration || !cannonBall.activeInHierarchy)
                 traveling = false;
 
             yield return null;
         }
+        
+        if (cannonBall.activeInHierarchy)
+            ResetCannonBall();
 
-        cannonBall.SetActive(false);
-        cannonBallCollider.CollisionEnabled = false;
-        cannonBall.transform.position = cannonBall.transform.parent.position;
+        onFireFinish.Invoke();
     }
 
     void OnCannonBallTriggerDetected(CustomCollider2D collider)
     {
-        if (collider != GetComponent<CustomBoxCollider2D>())
-            Debug.Log("Collided!");
+        if (collider != boxCollider)
+        {
+            ResetCannonBall();
+        }
     }
 
-    public bool HasFiredThisTurn
+    public bool IsFiring
     {
-        set { hasFiredThisTurn = value; }
+        get { return isFiring; }
+        set { isFiring = value; }
     }
 
     public float CurrentProjectileSpeed
@@ -144,5 +161,10 @@ public class TankShooting : MonoBehaviour
     public UnityEvent OnAngleChange
     {
         get { return onAngleChange; }
+    }
+
+    public UnityEvent OnFireFinish
+    {
+        get { return onFireFinish; }
     }
 }

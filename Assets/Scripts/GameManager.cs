@@ -22,7 +22,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject tank2;
     [SerializeField] float turnDuration = 60.0f;
 
+    Camera gameCamera;
     Tank[] tanks = new Tank[2];
+    Tank activeTank;
     float turnTime; 
 
     void Awake()
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         else
         {
+            gameCamera = FindObjectOfType<Camera>();
+
             turnTime = turnDuration;
             
             tanks[0].index = 0;
@@ -44,15 +48,22 @@ public class GameManager : MonoBehaviour
             tanks[1].movement.enabled = false;
             tanks[0].shooting.enabled = true;
             tanks[1].shooting.enabled = false;
+
+            activeTank = tanks[0];
+            
+            tanks[0].shooting.OnFireFinish.AddListener(ChangeTurns);
+            tanks[1].shooting.OnFireFinish.AddListener(ChangeTurns);
         }
     }
 
     void Update()
     {
-        turnTime -= Time.deltaTime;
-
-        if (turnTime <= 0f)
-            ChangeTurns();
+        if (!activeTank.shooting.IsFiring)
+        {
+            turnTime -= Time.deltaTime;
+            if (turnTime <= 0f)
+                ChangeTurns();
+        }
     }
 
     void ChangeTurns()
@@ -65,24 +76,16 @@ public class GameManager : MonoBehaviour
             tank.shooting.enabled = !tank.shooting.enabled;
 
             if (tank.shooting.enabled)
-                tank.shooting.HasFiredThisTurn = false;
+            {
+                tank.shooting.IsFiring = false;
+                activeTank = tank;
+            }
         }
     }
 
-    public Tank GetActiveTank()
+    public Tank ActiveTank
     {
-        Tank activeTank = new Tank(-1, null, null);
-
-        foreach (Tank tank in tanks)
-        {
-            if (tank.movement.enabled)
-                activeTank = tank;
-        }
-
-        if (activeTank.index == -1)
-            Debug.LogError("There are no active tanks.", gameObject);
-
-        return activeTank;
+        get { return activeTank; }
     }
 
     public float TurnTime
