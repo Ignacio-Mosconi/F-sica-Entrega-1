@@ -47,9 +47,9 @@ TagManager:
   - name: Tanks
     uniqueID: 2281192505
     locked: 0
-  - name: Projectiles
-    uniqueID: 1294404479
-    locked: 0
   - name: Foreground
     uniqueID: 2840252479
+    locked: 0
+  - name: Projectiles
+    uniqueID: 1294404479
     locked: 0

@@ -36,52 +36,110 @@ public class CollisionManager : MonoBehaviour
             {
                 if (layerB.index >= layerA.index)
                 {
-                    foreach (CustomBoxCollider2D boxA in colliders[layerA])
+                    foreach (CustomCollider2D colliderA in colliders[layerA])
                     {
-                        Vector2 posA = boxA.transform.position;
-
-                        foreach (CustomBoxCollider2D boxB in colliders[layerB])
+                        if (colliderA.CollisionEnabled)
                         {
-                            if (boxA != boxB)
+                            ColliderType colliderAType = colliderA.GetColliderType();
+                            
+                            foreach (CustomCollider2D colliderB in colliders[layerB])
                             {
-                                Vector2 posB = boxB.transform.position;
-                                Vector2 diff = posB - posA;
-
-                                float minDistX = (boxA.BoundingBoxWidth + boxB.BoundingBoxWidth) * 0.5f;
-                                float minDistY = (boxA.BoundingBoxHeight + boxB.BoundingBoxHeight) * 0.5f;
-
-                                float deltaX = Mathf.Abs(diff.x);
-                                float deltaY = Mathf.Abs(diff.y);
-
-                                if (deltaX < minDistX && deltaY < minDistY)
+                                if (colliderB.CollisionEnabled)
                                 {
-                                    Vector2 normalA = Vector2.zero;
-                                    Vector2 normalB = Vector2.zero;
-                                    float horPenetration = minDistX - deltaX;
-                                    float verPenetration = minDistY - deltaY;
-                                    float distanceToMove = Mathf.Min(horPenetration, verPenetration);
+                                    ColliderType colliderBType = colliderB.GetColliderType();
 
-                                    if (horPenetration > verPenetration)
-                                    {
-                                        normalB.x = normalA.x = 0f;
-                                        normalB.y = (diff.y > 0f) ? 1f : -1f;
-                                        normalA.y = -normalB.y;
-                                    }
-                                    else
-                                    {
-                                        normalB.y = normalA.y = 0f;
-                                        normalB.x = (diff.x > 0f) ? 1f : -1f;
-                                        normalA.x = -normalB.x;
-                                    }
-                        
-                                    boxA.OnCollision.Invoke(boxB, normalA, distanceToMove);
-                                    boxB.OnCollision.Invoke(boxA, normalB, distanceToMove);
+                                    if (colliderAType == ColliderType.Box && colliderBType == ColliderType.Box)
+                                        CheckBoxAndBoxCollision(colliderA as CustomBoxCollider2D, colliderB as CustomBoxCollider2D);
+                                    if (colliderAType == ColliderType.Circle && colliderBType == ColliderType.Box)
+                                        CheckCircleAndBoxCollision(colliderA as CustomCircleCollider2D, colliderB as CustomBoxCollider2D);
+                                    if (colliderAType == ColliderType.Box && colliderBType == ColliderType.Circle)
+                                        CheckCircleAndBoxCollision(colliderB as CustomCircleCollider2D, colliderA as CustomBoxCollider2D);
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+    }
+
+    void CheckBoxAndBoxCollision(CustomBoxCollider2D boxA, CustomBoxCollider2D boxB)
+    {
+        Vector2 posA = boxA.transform.position;
+        Vector2 posB = boxB.transform.position;
+        Vector2 diff = posB - posA;
+
+        float minDistX = (boxA.Width + boxB.Width) * 0.5f;
+        float minDistY = (boxA.Height + boxB.Height) * 0.5f;
+
+        float deltaX = Mathf.Abs(diff.x);
+        float deltaY = Mathf.Abs(diff.y);
+
+        if (deltaX < minDistX && deltaY < minDistY)
+        {
+            Vector2 normalA = Vector2.zero;
+            Vector2 normalB = Vector2.zero;
+            float horPenetration = minDistX - deltaX;
+            float verPenetration = minDistY - deltaY;
+            float distanceToMove = Mathf.Min(horPenetration, verPenetration);
+
+            if (horPenetration > verPenetration)
+            {
+                normalB.x = normalA.x = 0f;
+                normalB.y = (diff.y > 0f) ? 1f : -1f;
+                normalA.y = -normalB.y;
+            }
+            else
+            {
+                normalB.y = normalA.y = 0f;
+                normalB.x = (diff.x > 0f) ? 1f : -1f;
+                normalA.x = -normalB.x;
+            }
+
+            boxA.OnCollision.Invoke(boxB, normalA, distanceToMove);
+            boxB.OnCollision.Invoke(boxA, normalB, distanceToMove);
+        }
+    }
+
+    void CheckCircleAndBoxCollision(CustomCircleCollider2D circle, CustomBoxCollider2D box)
+    {
+        Vector2 circlePos = circle.transform.position;
+        Vector2 boxPos = box.transform.position;
+        Vector2 diff = circlePos - boxPos;
+        bool collisionDetected = false;
+        float distOuterRadius = circle.Radius + box.OuterRadius;
+        float distInnerRadius = circle.Radius + box.InnerRadius;
+        float sqrDistance =  Vector2.SqrMagnitude(diff);
+
+        if (sqrDistance < distOuterRadius)
+        {
+            if (sqrDistance > distInnerRadius)
+            {
+                Vector2[] boxCorners = new Vector2[4];
+                boxCorners[0] = new Vector2(boxPos.x - box.Width * 0.5f, boxPos.y + box.Height * 0.5f);
+                boxCorners[1] = new Vector2(boxPos.x + box.Width * 0.5f, boxPos.y + box.Height * 0.5f);
+                boxCorners[2] = new Vector2(boxPos.x + box.Width * 0.5f, boxPos.y - box.Height * 0.5f);
+                boxCorners[3] = new Vector2(boxPos.x - box.Width * 0.5f, boxPos.y - box.Height * 0.5f);
+
+                foreach (Vector2 boxCorner in boxCorners)
+                {
+                    Vector2 cornerDiff = circlePos - boxCorner;
+                    
+                    if (Vector2.SqrMagnitude(cornerDiff) <= circle.Radius)
+                    {
+                        collisionDetected = true;
+                        break;
+                    }
+                }
+            }
+            else
+                collisionDetected = true;
+        }
+
+        if (collisionDetected)
+        {
+            circle.OnTrigger.Invoke(box);
+            box.OnTrigger.Invoke(circle);
         }
     }
 

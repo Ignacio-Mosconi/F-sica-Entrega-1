@@ -17,6 +17,7 @@ public class TankShooting : MonoBehaviour
     [SerializeField] [Range(0f, 90f)] float minAimingAngle = 0f;
     [SerializeField] [Range(135f, 180f)] float maxAimingAngle = 180f;
 
+    CustomCircleCollider2D cannonBallCollider;
     bool hasFiredThisTurn = false;
     float currentProjectileSpeed;
     float currentAimingAngle;
@@ -26,8 +27,12 @@ public class TankShooting : MonoBehaviour
 
     void Awake()
     {
+        cannonBallCollider = cannonBall.GetComponent<CustomCircleCollider2D>();
         currentAimingAngle = cannon.rotation.z;
         currentProjectileSpeed = minProjectileSpeed;
+
+        cannonBallCollider.OnTrigger.AddListener(OnCannonBallTriggerDetected);
+        cannonBallCollider.CollisionEnabled = false;
     }
 
     void Update()
@@ -88,6 +93,7 @@ public class TankShooting : MonoBehaviour
         float initialPosY = cannonBall.transform.position.y;
 
         cannonBall.SetActive(true);
+        cannonBallCollider.CollisionEnabled = true;
 
         while (traveling)
         {
@@ -105,7 +111,14 @@ public class TankShooting : MonoBehaviour
         }
 
         cannonBall.SetActive(false);
+        cannonBallCollider.CollisionEnabled = false;
         cannonBall.transform.position = cannonBall.transform.parent.position;
+    }
+
+    void OnCannonBallTriggerDetected(CustomCollider2D collider)
+    {
+        if (collider != GetComponent<CustomBoxCollider2D>())
+            Debug.Log("Collided!");
     }
 
     public bool HasFiredThisTurn

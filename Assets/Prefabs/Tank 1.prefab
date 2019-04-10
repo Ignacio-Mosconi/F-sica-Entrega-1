@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2562511631480697490}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cannon Ball Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8952769004658926199}
   - component: {fileID: 1055742929723653205}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 6918085904589963103}
   - component: {fileID: 2281295603741301071}
   - component: {fileID: 8101784093561985203}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,6 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1000
+  collisionEnabled: 1
 --- !u!1 &7346034196229575082
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +250,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6745844064086992888}
   - component: {fileID: 1822033975288661821}
-  m_Layer: 0
+  - component: {fileID: 1121216636642519817}
+  m_Layer: 10
   m_Name: Cannon Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +307,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1294404479
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c652e9ac00085134bbc55c01b3b43656, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -318,3 +320,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1121216636642519817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7346034196229575082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4c67f9f79c29a41bdc1948ceba48cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  collisionEnabled: 0
