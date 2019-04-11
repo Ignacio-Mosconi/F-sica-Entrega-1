@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public struct Tank
 {
@@ -36,6 +37,8 @@ public class GameManager : MonoBehaviour
     Tank activeTank;
     Dictionary<ViewBound, float> viewBounds = new Dictionary<ViewBound, float>();
     float turnTime; 
+
+    UnityEvent onTurnChange = new UnityEvent();
 
     void Awake()
     {
@@ -96,6 +99,8 @@ public class GameManager : MonoBehaviour
                 activeTank = tank;
             }
         }
+
+        onTurnChange.Invoke();
     }
 
     public Tank ActiveTank
@@ -116,6 +121,11 @@ public class GameManager : MonoBehaviour
     public float GetViewBound(ViewBound viewBound)
     {
         return viewBounds[viewBound];
+    }
+
+    public UnityEvent OnTurnChange
+    {
+        get { return onTurnChange; }
     }
 
     public static GameManager Instance
