@@ -11,7 +11,6 @@ public class TankShooting : MonoBehaviour
     }
 
     [SerializeField] Transform cannon;
-    [SerializeField] CustomBoxCollider2D boxCollider;
     [SerializeField] GameObject cannonBall;
     [SerializeField] CannonFacing cannonFacing;
     [SerializeField] [Range(10f, 15f)] float minProjectileSpeed = 10f;
@@ -20,6 +19,7 @@ public class TankShooting : MonoBehaviour
     [SerializeField] [Range(135f, 180f)] float maxAimingAngle = 180f;
     [SerializeField] [Range(5f, 10f)] float shotDuration = 5f;
 
+    CustomBoxCollider2D boxCollider;
     CustomCircleCollider2D cannonBallCollider;
     bool isFiring = false;
     float currentProjectileSpeed;

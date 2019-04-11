@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public struct Tank
 {
@@ -14,6 +15,14 @@ public struct Tank
     }
 }
 
+public enum ViewBound
+{
+    Top,
+    Bottom,
+    Left,
+    Right
+}
+
 public class GameManager : MonoBehaviour
 {
     static GameManager instance;
@@ -25,6 +34,7 @@ public class GameManager : MonoBehaviour
     Camera gameCamera;
     Tank[] tanks = new Tank[2];
     Tank activeTank;
+    Dictionary<ViewBound, float> viewBounds = new Dictionary<ViewBound, float>();
     float turnTime; 
 
     void Awake()
@@ -34,6 +44,11 @@ public class GameManager : MonoBehaviour
         else
         {
             gameCamera = FindObjectOfType<Camera>();
+
+            viewBounds.Add(ViewBound.Top, gameCamera.ViewportToWorldPoint(new Vector3(0f, 1f, 0f)).y);
+            viewBounds.Add(ViewBound.Bottom, gameCamera.ViewportToWorldPoint(new Vector3(0f, 0f, 0f)).y);
+            viewBounds.Add(ViewBound.Left, gameCamera.ViewportToWorldPoint(new Vector3(0f, 0f, 0f)).x);
+            viewBounds.Add(ViewBound.Right, gameCamera.ViewportToWorldPoint(new Vector3(1f, 0f, 0f)).x);
 
             turnTime = turnDuration;
             
@@ -96,6 +111,11 @@ public class GameManager : MonoBehaviour
     public Tank[] Tanks
     {
         get { return tanks; }
+    }
+
+    public float GetViewBound(ViewBound viewBound)
+    {
+        return viewBounds[viewBound];
     }
 
     public static GameManager Instance
