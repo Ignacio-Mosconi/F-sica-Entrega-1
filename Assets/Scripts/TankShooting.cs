@@ -13,6 +13,7 @@ public class TankShooting : MonoBehaviour
     [SerializeField] Transform cannon;
     [SerializeField] GameObject cannonBall;
     [SerializeField] CannonFacing cannonFacing;
+    [SerializeField] CustomBoxCollider2D enemyCollider;
     [SerializeField] [Range(5f, 10f)] float minProjectileSpeed = 5f;
     [SerializeField] [Range(15f, 20f)] float maxProjectileSpeed = 20f;
     [SerializeField] [Range(0f, 90f)] float minAimingAngle = 0f;
@@ -24,6 +25,7 @@ public class TankShooting : MonoBehaviour
     bool isFiring = false;
     float currentProjectileSpeed;
     float currentAimingAngle;
+    float speedAtShot;
 
     UnityEvent onSpeedChange = new UnityEvent();
     UnityEvent onAngleChange = new UnityEvent();
@@ -98,6 +100,7 @@ public class TankShooting : MonoBehaviour
 
         ResetCannonBall();
         isFiring = true;
+        speedAtShot = currentProjectileSpeed;
 
         StartCoroutine(ComputeProjectileTrajectory(projectileSpeed, aimingAngle, Physics2D.gravity.y));
     }
@@ -147,6 +150,9 @@ public class TankShooting : MonoBehaviour
         if (collider != boxCollider)
         {
             ResetCannonBall();
+            
+            if (collider == enemyCollider)
+                GameManager.Instance.IncreasePlayerScore(speedAtShot);
         }
     }
 

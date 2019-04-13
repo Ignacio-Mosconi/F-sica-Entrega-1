@@ -7,13 +7,6 @@ public struct Tank
     public int index;
     public TankMovement movement;
     public TankShooting shooting;
-
-    public Tank(int i, TankMovement m, TankShooting s)
-    {
-        index = i;
-        movement = m;
-        shooting = s;
-    }
 }
 
 public enum ViewBound
@@ -36,9 +29,10 @@ public class GameManager : MonoBehaviour
     Tank[] tanks = new Tank[2];
     Tank activeTank;
     Dictionary<ViewBound, float> viewBounds = new Dictionary<ViewBound, float>();
-    float turnTime; 
-
+    float turnTime;
+    int[] playerScores = { 0, 0 };
     UnityEvent onTurnChange = new UnityEvent();
+    UnityEvent onScoreChange = new UnityEvent();
 
     void Awake()
     {
@@ -60,6 +54,7 @@ public class GameManager : MonoBehaviour
             tanks[0].movement = tank1.GetComponent<TankMovement>();
             tanks[1].movement = tank2.GetComponent<TankMovement>();
             tanks[0].shooting = tank1.GetComponent<TankShooting>();
+            tanks[1].shooting = tank2.GetComponent<TankShooting>();
             tanks[1].shooting = tank2.GetComponent<TankShooting>();
 
             tanks[0].movement.enabled = true;
@@ -118,14 +113,30 @@ public class GameManager : MonoBehaviour
         get { return tanks; }
     }
 
+    public int GetPlayerScore(int index)
+    {
+        return playerScores[index];
+    }
+
     public float GetViewBound(ViewBound viewBound)
     {
         return viewBounds[viewBound];
     }
 
+    public void IncreasePlayerScore(float speedAtShot)
+    {
+        playerScores[activeTank.index] += (int)speedAtShot;
+        onScoreChange.Invoke();
+    }
+
     public UnityEvent OnTurnChange
     {
         get { return onTurnChange; }
+    }
+
+    public UnityEvent OnScoreChange
+    {
+        get { return onScoreChange; }
     }
 
     public static GameManager Instance

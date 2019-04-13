@@ -5,11 +5,12 @@ using TMPro;
 public class HUD : MonoBehaviour
 {
     [SerializeField] RectTransform[] uiPanels;
-    [SerializeField] TextMeshProUGUI[] activePlayerTexts;
+    [SerializeField] GameObject[] activePlayerPanels;
     [SerializeField] TextMeshProUGUI[] projectileSpeedTexts;
     [SerializeField] TextMeshProUGUI[] aimingAngleTexts;
     [SerializeField] TextMeshProUGUI[] speedTitleTexts;
     [SerializeField] TextMeshProUGUI[] angleTitleTexts;
+    [SerializeField] TextMeshProUGUI[] scoreTexts;
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] Color activeModifierColor;
     [SerializeField] Color inactiveModifierColor;
@@ -25,6 +26,7 @@ public class HUD : MonoBehaviour
             aimingAngleTexts[tank.index].text = tank.shooting.CurrentAimingAngle.ToString();
             
             GameManager.Instance.OnTurnChange.AddListener(ChangeActivePlayerUI);
+            GameManager.Instance.OnScoreChange.AddListener(ChangeScoreText);
             tank.shooting.OnSpeedChange.AddListener(ChangeSpeedText);
             tank.shooting.OnAngleChange.AddListener(ChangeAngleText);
             tank.shooting.OnSpeedModifierPressed.AddListener(SpeedTextColorModifierOnPressed);
@@ -74,8 +76,8 @@ public class HUD : MonoBehaviour
         StartCoroutine(ScaleUIPanel(uiPanels[activeTank.index], true));
         StartCoroutine(ScaleUIPanel(uiPanels[nonActiveTank.index], false));
 
-        activePlayerTexts[activeTank.index].gameObject.SetActive(true);
-        activePlayerTexts[nonActiveTank.index].gameObject.SetActive(false);
+        activePlayerPanels[activeTank.index].SetActive(true);
+        activePlayerPanels[nonActiveTank.index].SetActive(false);
 
         projectileSpeedTexts[nonActiveTank.index].color = inactiveModifierColor;
         aimingAngleTexts[nonActiveTank.index].color = inactiveModifierColor;
@@ -99,29 +101,36 @@ public class HUD : MonoBehaviour
 
     void SpeedTextColorModifierOnPressed()
     {
-        Tank tank = GameManager.Instance.ActiveTank;
+        Tank activeTank = GameManager.Instance.ActiveTank;
 
-        speedTitleTexts[tank.index].color = activeModifierColor;
+        speedTitleTexts[activeTank.index].color = activeModifierColor;
     }
 
     void SpeedTextColorModifierOnRelease()
     {
-        Tank tank = GameManager.Instance.ActiveTank;
+        Tank activeTank = GameManager.Instance.ActiveTank;
 
-        speedTitleTexts[tank.index].color = inactiveModifierColor;
+        speedTitleTexts[activeTank.index].color = inactiveModifierColor;
     }
 
     void AngleTextColorModifierOnPressed()
     {
-        Tank tank = GameManager.Instance.ActiveTank;
+        Tank activeTank = GameManager.Instance.ActiveTank;
 
-        angleTitleTexts[tank.index].color = activeModifierColor;
+        angleTitleTexts[activeTank.index].color = activeModifierColor;
     }
 
     void AngleTextColorModifierOnRelease()
     {
-        Tank tank = GameManager.Instance.ActiveTank;
+        Tank activeTank = GameManager.Instance.ActiveTank;
 
-        angleTitleTexts[tank.index].color = inactiveModifierColor;
+        angleTitleTexts[activeTank.index].color = inactiveModifierColor;
+    }
+
+    void ChangeScoreText()
+    {
+        Tank activeTank = GameManager.Instance.ActiveTank;
+
+        scoreTexts[activeTank.index].text = GameManager.Instance.GetPlayerScore(activeTank.index).ToString();
     }
 }
