@@ -8,9 +8,14 @@ public class HUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] activePlayerTexts;
     [SerializeField] TextMeshProUGUI[] projectileSpeedTexts;
     [SerializeField] TextMeshProUGUI[] aimingAngleTexts;
+    [SerializeField] TextMeshProUGUI[] speedTitleTexts;
+    [SerializeField] TextMeshProUGUI[] angleTitleTexts;
     [SerializeField] TextMeshProUGUI timeText;
-    [SerializeField] float panelScaleDuration = 2f;
-    [SerializeField] float panelEnlargedScale = 2f;
+    [SerializeField] Color activeModifierColor;
+    [SerializeField] Color inactiveModifierColor;
+    [SerializeField] [Range(0.1f, 1f)] float panelScaleDuration = 0.75f;
+    [SerializeField] [Range(1f, 1.5f)] float panelEnlargedScale = 1.2f;
+    [SerializeField] [Range(0.5f, 1f)] float panelShrinkedScale = 0.8f;
 
     void Start()
     {
@@ -22,6 +27,10 @@ public class HUD : MonoBehaviour
             GameManager.Instance.OnTurnChange.AddListener(ChangeActivePlayerUI);
             tank.shooting.OnSpeedChange.AddListener(ChangeSpeedText);
             tank.shooting.OnAngleChange.AddListener(ChangeAngleText);
+            tank.shooting.OnSpeedModifierPressed.AddListener(SpeedTextColorModifierOnPressed);
+            tank.shooting.OnSpeedModifierReleased.AddListener(SpeedTextColorModifierOnRelease);
+            tank.shooting.OnAngleModifierPressed.AddListener(AngleTextColorModifierOnPressed);
+            tank.shooting.OnAngleModifierReleased.AddListener(AngleTextColorModifierOnRelease);
         }
 
         ChangeActivePlayerUI();
@@ -67,6 +76,9 @@ public class HUD : MonoBehaviour
 
         activePlayerTexts[activeTank.index].gameObject.SetActive(true);
         activePlayerTexts[nonActiveTank.index].gameObject.SetActive(false);
+
+        projectileSpeedTexts[nonActiveTank.index].color = inactiveModifierColor;
+        aimingAngleTexts[nonActiveTank.index].color = inactiveModifierColor;
     }
 
     IEnumerator ScaleUIPanel(RectTransform panel, bool enlarge)
@@ -74,7 +86,7 @@ public class HUD : MonoBehaviour
         float time = 0f;
         Vector3 initialScale = panel.localScale;
         Vector3 targetScale = (enlarge) ? new Vector3(panelEnlargedScale, panelEnlargedScale, panelEnlargedScale) : 
-                                            new Vector3(1f, 1f, 1f);
+                                            new Vector3(panelShrinkedScale, panelShrinkedScale, panelShrinkedScale);
 
         while (panel.localScale != targetScale)
         {
@@ -83,5 +95,33 @@ public class HUD : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    void SpeedTextColorModifierOnPressed()
+    {
+        Tank tank = GameManager.Instance.ActiveTank;
+
+        speedTitleTexts[tank.index].color = activeModifierColor;
+    }
+
+    void SpeedTextColorModifierOnRelease()
+    {
+        Tank tank = GameManager.Instance.ActiveTank;
+
+        speedTitleTexts[tank.index].color = inactiveModifierColor;
+    }
+
+    void AngleTextColorModifierOnPressed()
+    {
+        Tank tank = GameManager.Instance.ActiveTank;
+
+        angleTitleTexts[tank.index].color = activeModifierColor;
+    }
+
+    void AngleTextColorModifierOnRelease()
+    {
+        Tank tank = GameManager.Instance.ActiveTank;
+
+        angleTitleTexts[tank.index].color = inactiveModifierColor;
     }
 }

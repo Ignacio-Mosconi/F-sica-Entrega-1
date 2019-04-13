@@ -13,8 +13,8 @@ public class TankShooting : MonoBehaviour
     [SerializeField] Transform cannon;
     [SerializeField] GameObject cannonBall;
     [SerializeField] CannonFacing cannonFacing;
-    [SerializeField] [Range(10f, 15f)] float minProjectileSpeed = 10f;
-    [SerializeField] [Range(25f, 30f)] float maxProjectileSpeed = 30f;
+    [SerializeField] [Range(5f, 10f)] float minProjectileSpeed = 5f;
+    [SerializeField] [Range(15f, 20f)] float maxProjectileSpeed = 20f;
     [SerializeField] [Range(0f, 90f)] float minAimingAngle = 0f;
     [SerializeField] [Range(135f, 180f)] float maxAimingAngle = 180f;
     [SerializeField] [Range(5f, 10f)] float shotDuration = 5f;
@@ -28,6 +28,10 @@ public class TankShooting : MonoBehaviour
     UnityEvent onSpeedChange = new UnityEvent();
     UnityEvent onAngleChange = new UnityEvent();
     UnityEvent onFireFinish = new UnityEvent();
+    UnityEvent onSpeedModifierPressed= new UnityEvent();
+    UnityEvent onSpeedModifierReleased = new UnityEvent();
+    UnityEvent onAngleModifierPressed= new UnityEvent();
+    UnityEvent onAngleModifierReleased = new UnityEvent();
 
     void Awake()
     {
@@ -42,6 +46,15 @@ public class TankShooting : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetButtonDown("Adjust Speed Modifier") && !Input.GetButton("Adjust Angle Modifier"))
+            onSpeedModifierPressed.Invoke();
+        if (Input.GetButtonUp("Adjust Speed Modifier"))
+            onSpeedModifierReleased.Invoke();
+        if (Input.GetButtonDown("Adjust Angle Modifier") && !Input.GetButton("Adjust Speed Modifier"))
+            onAngleModifierPressed.Invoke();
+        if (Input.GetButtonUp("Adjust Angle Modifier"))
+            onAngleModifierReleased.Invoke();
+
         if (Input.GetButton("Adjust Speed Modifier") && !Input.GetButton("Adjust Angle Modifier"))
             AdjustProjectileSpeed();
         if (Input.GetButton("Adjust Angle Modifier") && !Input.GetButton("Adjust Speed Modifier"))
@@ -166,5 +179,25 @@ public class TankShooting : MonoBehaviour
     public UnityEvent OnFireFinish
     {
         get { return onFireFinish; }
+    }
+
+    public UnityEvent OnSpeedModifierPressed
+    {
+        get { return onSpeedModifierPressed; }
+    }
+
+    public UnityEvent OnSpeedModifierReleased
+    {
+        get { return onSpeedModifierReleased; }
+    }
+
+    public UnityEvent OnAngleModifierPressed
+    {
+        get { return onAngleModifierPressed; }
+    }
+
+    public UnityEvent OnAngleModifierReleased
+    {
+        get { return onAngleModifierReleased; }
     }
 }

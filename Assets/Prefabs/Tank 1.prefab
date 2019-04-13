@@ -220,11 +220,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannon: {fileID: 8952769004658926199}
-  boxCollider: {fileID: 0}
   cannonBall: {fileID: 7346034196229575082}
   cannonFacing: 1
-  minProjectileSpeed: 10
-  maxProjectileSpeed: 30
+  minProjectileSpeed: 5
+  maxProjectileSpeed: 20
   minAimingAngle: 0
   maxAimingAngle: 180
   shotDuration: 5
