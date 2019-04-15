@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
                 tank.shooting.IsFiring = false;
                 activeTank = tank;
             }
+            else
+                tank.movement.DisableMovementAnimation();
         }
 
         onTurnChange.Invoke();

@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 6918085904589963103}
   - component: {fileID: 2281295603741301071}
   - component: {fileID: 8101784093561985203}
+  - component: {fileID: 8201474693706244713}
   m_Layer: 8
   m_Name: Tank 1
   m_TagString: Untagged
@@ -242,6 +243,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mass: 1000
   collisionEnabled: 1
+--- !u!95 &8201474693706244713
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6918085904589963100}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b8a58434466d7d04a970638bbadebf5e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7346034196229575082
 GameObject:
   m_ObjectHideFlags: 0
