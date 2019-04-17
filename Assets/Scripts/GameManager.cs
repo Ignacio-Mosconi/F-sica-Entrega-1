@@ -7,6 +7,7 @@ public struct Tank
     public int index;
     public TankMovement movement;
     public TankShooting shooting;
+    public TankAnimation animation;
 }
 
 public enum ViewBound
@@ -55,12 +56,15 @@ public class GameManager : MonoBehaviour
             tanks[1].movement = tank2.GetComponent<TankMovement>();
             tanks[0].shooting = tank1.GetComponent<TankShooting>();
             tanks[1].shooting = tank2.GetComponent<TankShooting>();
-            tanks[1].shooting = tank2.GetComponent<TankShooting>();
+            tanks[0].animation = tank1.GetComponent<TankAnimation>();
+            tanks[1].animation = tank2.GetComponent<TankAnimation>();
 
             tanks[0].movement.enabled = true;
             tanks[1].movement.enabled = false;
             tanks[0].shooting.enabled = true;
             tanks[1].shooting.enabled = false;
+            tanks[0].animation.enabled = true;
+            tanks[1].animation.enabled = false;
 
             activeTank = tanks[0];
             
@@ -87,14 +91,15 @@ public class GameManager : MonoBehaviour
         {
             tank.movement.enabled = !tank.movement.enabled;
             tank.shooting.enabled = !tank.shooting.enabled;
+            tank.animation.enabled = !tank.animation.enabled;
 
             if (tank.shooting.enabled)
             {
-                tank.shooting.IsFiring = false;
+                tank.shooting.ReEnableFiring();
                 activeTank = tank;
             }
             else
-                tank.movement.DisableMovementAnimation();
+                tank.animation.DisableMovementAnimation();
         }
 
         onTurnChange.Invoke();

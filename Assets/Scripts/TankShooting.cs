@@ -19,6 +19,7 @@ public class TankShooting : MonoBehaviour
     [SerializeField] [Range(0f, 90f)] float minAimingAngle = 0f;
     [SerializeField] [Range(135f, 180f)] float maxAimingAngle = 180f;
     [SerializeField] [Range(5f, 10f)] float shotDuration = 5f;
+    [SerializeField] [Range(1f, 3f)] float firingEnableDelay = 2f;
 
     CustomBoxCollider2D boxCollider;
     CustomCircleCollider2D cannonBallCollider;
@@ -29,6 +30,7 @@ public class TankShooting : MonoBehaviour
 
     UnityEvent onSpeedChange = new UnityEvent();
     UnityEvent onAngleChange = new UnityEvent();
+    UnityEvent onFireStart = new UnityEvent();
     UnityEvent onFireFinish = new UnityEvent();
     UnityEvent onSpeedModifierPressed= new UnityEvent();
     UnityEvent onSpeedModifierReleased = new UnityEvent();
@@ -124,6 +126,8 @@ public class TankShooting : MonoBehaviour
         cannonBall.SetActive(true);
         cannonBallCollider.CollisionEnabled = true;
 
+        onFireStart.Invoke();
+
         while (traveling)
         {
             time += Time.deltaTime;
@@ -156,10 +160,19 @@ public class TankShooting : MonoBehaviour
         }
     }
 
+    void EnableFiring()
+    {
+        isFiring = false;
+    }
+
+    public void ReEnableFiring()
+    {
+        Invoke("EnableFiring", firingEnableDelay);
+    }
+
     public bool IsFiring
     {
         get { return isFiring; }
-        set { isFiring = value; }
     }
 
     public float CurrentProjectileSpeed
@@ -180,6 +193,11 @@ public class TankShooting : MonoBehaviour
     public UnityEvent OnAngleChange
     {
         get { return onAngleChange; }
+    }
+
+    public UnityEvent OnFireStart
+    {
+        get { return onFireStart; }
     }
 
     public UnityEvent OnFireFinish

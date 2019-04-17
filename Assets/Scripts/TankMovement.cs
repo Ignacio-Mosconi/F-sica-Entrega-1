@@ -5,12 +5,11 @@ public class TankMovement : MonoBehaviour
 {
     [SerializeField] float speed = 10.0f;
 
-    Animator animator;
     CustomBoxCollider2D boxCollider;
+    bool isMoving = false;
 
     void Awake()
     {
-        animator = GetComponent<Animator>();
         boxCollider = GetComponent<CustomBoxCollider2D>();
         boxCollider.OnCollision.AddListener(OnCollisionDetected);
     }
@@ -20,8 +19,7 @@ public class TankMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float horizontalMovement = horizontalInput * speed * Time.deltaTime;
 
-        bool isMoving = (horizontalMovement != 0f) ? true : false;
-        animator.SetBool("Moving", isMoving);
+        isMoving = (horizontalMovement != 0f) ? true : false;
 
         transform.Translate(horizontalMovement, 0f, 0f);
         ClampHorizontalPosition();
@@ -47,8 +45,8 @@ public class TankMovement : MonoBehaviour
         ClampHorizontalPosition();
     }
 
-    public void DisableMovementAnimation()
+    public bool IsMoving
     {
-        animator.SetBool("Moving", false);
+        get { return isMoving; }
     }
 }

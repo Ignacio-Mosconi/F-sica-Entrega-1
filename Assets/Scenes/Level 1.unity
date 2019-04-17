@@ -1443,6 +1443,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank Panel 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1080606024152239452, guid: 6bfa8b517c95df748a2bee293e55ae5a,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -1568,16 +1588,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7044682733199353025, guid: 6bfa8b517c95df748a2bee293e55ae5a,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -1594,16 +1604,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3725863579237884762, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
         type: 3}
       propertyPath: m_isInputParsingRequired
       value: 1
@@ -2292,6 +2292,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank Panel 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1080606024152239452, guid: 6bfa8b517c95df748a2bee293e55ae5a,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -2417,16 +2437,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7044682733353955362, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7044682733199353025, guid: 6bfa8b517c95df748a2bee293e55ae5a,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -2443,16 +2453,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3725863579237884762, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1411692578647846638, guid: 6bfa8b517c95df748a2bee293e55ae5a,
         type: 3}
       propertyPath: m_isInputParsingRequired
       value: 1
