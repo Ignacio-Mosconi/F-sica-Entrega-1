@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -89,7 +90,8 @@ public class GameManager : MonoBehaviour
 
         foreach (Tank tank in tanks)
         {
-            tank.movement.enabled = !tank.movement.enabled;
+            if (!tank.movement.IsRespawning)
+                tank.movement.enabled = !tank.movement.enabled;
             tank.shooting.enabled = !tank.shooting.enabled;
             tank.animation.enabled = !tank.animation.enabled;
 
@@ -132,6 +134,11 @@ public class GameManager : MonoBehaviour
 
     public void IncreasePlayerScore(float speedAtShot)
     {
+        Tank nonActiveTank = Array.Find(tanks, t => t.index != activeTank.index);
+        
+        nonActiveTank.animation.PlayReceiveFire();
+        nonActiveTank.movement.Respawn();
+        
         playerScores[activeTank.index] += (int)speedAtShot;
         onScoreChange.Invoke();
     }

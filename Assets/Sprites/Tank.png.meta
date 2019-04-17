@@ -4,6 +4,10 @@ TextureImporter:
   fileIDToRecycleName:
     21300000: Tank_0
     21300002: Tank_1
+    21300004: Tank_2
+    21300006: Tank_3
+    21300008: Tank_4
+    21300010: Tank_5
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -90,6 +94,86 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 320
+        width: 256
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 405e73ae38b862f41b0d6b93ced189e8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tank_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 320
+        width: 256
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e783edacc74245947873d843df6886ef
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tank_2
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 160
+        width: 256
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1da19b47dec45e4cb90595e6f25646a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tank_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 160
+        width: 256
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b80efc3fae94dc4e876d99060d9e8dc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tank_4
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
         width: 256
         height: 160
@@ -100,13 +184,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33976bc8da06d4546ad3225ee63d780c
+      spriteID: 51ecd5705392a3143bb70c1484f6b37d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tank_1
+      name: Tank_5
       rect:
         serializedVersion: 2
         x: 256
@@ -120,7 +204,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc5d72842dfde0b49abe6043637c0b1b
+      spriteID: 8ade230636913224ba15cf614b27dc6e
       vertices: []
       indices: 
       edges: []

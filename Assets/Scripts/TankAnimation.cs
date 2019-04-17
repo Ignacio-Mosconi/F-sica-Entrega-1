@@ -10,7 +10,7 @@ public class TankAnimation : MonoBehaviour
     TankMovement tankMovement;
     TankShooting tankShooting;
 
-   void Start()
+   void Awake()
    {
        tankAnimator = GetComponent<Animator>();
        cannonAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -25,10 +25,15 @@ public class TankAnimation : MonoBehaviour
         tankAnimator.SetBool("Moving", tankMovement.IsMoving);
    }
 
-   void PlayCannonFire()
-   {
-       cannonAnimator.SetTrigger("Has Fired");
-   }
+    void PlayCannonFire()
+    {
+        cannonAnimator.SetTrigger("Has Fired");
+    }
+
+    public void PlayReceiveFire()
+    {
+        tankAnimator.SetTrigger("Has Received Fire");
+    }
 
     public void DisableMovementAnimation()
     {

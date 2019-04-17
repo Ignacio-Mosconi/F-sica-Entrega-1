@@ -3,15 +3,19 @@
 [RequireComponent(typeof(CustomBoxCollider2D))]
 public class TankMovement : MonoBehaviour
 {
-    [SerializeField] float speed = 10.0f;
+    [SerializeField] [Range(5f, 15f)] float speed = 10f;
 
     CustomBoxCollider2D boxCollider;
+    Vector2 initialPosition;
     bool isMoving = false;
+    bool isRespawning = false;
 
     void Awake()
     {
         boxCollider = GetComponent<CustomBoxCollider2D>();
         boxCollider.OnCollision.AddListener(OnCollisionDetected);
+
+        initialPosition = new Vector2(transform.position.x, transform.position.y);
     }
 
     void Update()
@@ -45,8 +49,26 @@ public class TankMovement : MonoBehaviour
         ClampHorizontalPosition();
     }
 
+    void ResetPosition()
+    {
+        enabled = true;
+        isRespawning = false;
+        transform.position = initialPosition;
+    }
+
+    public void Respawn()
+    {
+        isRespawning = true;
+        Invoke("ResetPosition", GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+    }
+
     public bool IsMoving
     {
         get { return isMoving; }
+    }
+
+    public bool IsRespawning
+    {
+        get { return isRespawning; }
     }
 }
