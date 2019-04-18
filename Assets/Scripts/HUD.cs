@@ -79,8 +79,14 @@ public class HUD : MonoBehaviour
         activePlayerPanels[activeTank.index].SetActive(true);
         activePlayerPanels[nonActiveTank.index].SetActive(false);
 
-        projectileSpeedTexts[nonActiveTank.index].color = inactiveModifierColor;
-        aimingAngleTexts[nonActiveTank.index].color = inactiveModifierColor;
+        speedTitleTexts[nonActiveTank.index].color = inactiveModifierColor;
+        angleTitleTexts[nonActiveTank.index].color = inactiveModifierColor;
+
+        bool highilightSpeed = (Input.GetButton("Adjust Speed Modifier")) && (!Input.GetButton("Adjust Angle Modifier"));
+        bool highlightAngle = (Input.GetButton("Adjust Angle Modifier")) && (!Input.GetButton("Adjust Speed Modifier"));
+        
+        speedTitleTexts[activeTank.index].color = (highilightSpeed) ? activeModifierColor : inactiveModifierColor;
+        angleTitleTexts[activeTank.index].color = (highlightAngle) ? activeModifierColor : inactiveModifierColor;
     }
 
     IEnumerator ScaleUIPanel(RectTransform panel, bool enlarge)
@@ -104,6 +110,7 @@ public class HUD : MonoBehaviour
         Tank activeTank = GameManager.Instance.ActiveTank;
 
         speedTitleTexts[activeTank.index].color = activeModifierColor;
+        angleTitleTexts[activeTank.index].color = inactiveModifierColor;
     }
 
     void SpeedTextColorModifierOnRelease()
@@ -111,6 +118,9 @@ public class HUD : MonoBehaviour
         Tank activeTank = GameManager.Instance.ActiveTank;
 
         speedTitleTexts[activeTank.index].color = inactiveModifierColor;
+
+        if (Input.GetButton("Adjust Angle Modifier"))
+            angleTitleTexts[activeTank.index].color = activeModifierColor;
     }
 
     void AngleTextColorModifierOnPressed()
@@ -118,6 +128,7 @@ public class HUD : MonoBehaviour
         Tank activeTank = GameManager.Instance.ActiveTank;
 
         angleTitleTexts[activeTank.index].color = activeModifierColor;
+        speedTitleTexts[activeTank.index].color = inactiveModifierColor;
     }
 
     void AngleTextColorModifierOnRelease()
@@ -125,6 +136,9 @@ public class HUD : MonoBehaviour
         Tank activeTank = GameManager.Instance.ActiveTank;
 
         angleTitleTexts[activeTank.index].color = inactiveModifierColor;
+
+        if (Input.GetButton("Adjust Speed Modifier"))
+            speedTitleTexts[activeTank.index].color = activeModifierColor;
     }
 
     void ChangeScoreText()
