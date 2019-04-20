@@ -21,6 +21,7 @@ public class TankShooting : MonoBehaviour
     [SerializeField] [Range(5f, 10f)] float shotDuration = 5f;
     [SerializeField] [Range(1f, 3f)] float firingEnableDelay = 2f;
 
+    Coroutine shootingRoutine;
     CustomBoxCollider2D boxCollider;
     CustomCircleCollider2D cannonBallCollider;
     bool isFiring = false;
@@ -41,8 +42,8 @@ public class TankShooting : MonoBehaviour
     {
         boxCollider = GetComponent<CustomBoxCollider2D>();
         cannonBallCollider = cannonBall.GetComponent<CustomCircleCollider2D>();
-        currentAimingAngle = cannon.rotation.z;
-        currentProjectileSpeed = minProjectileSpeed;
+
+        ResetCannonStatus();
 
         cannonBallCollider.OnTrigger.AddListener(OnCannonBallTriggerDetected);
         cannonBallCollider.CollisionEnabled = false;
@@ -104,7 +105,7 @@ public class TankShooting : MonoBehaviour
         isFiring = true;
         speedAtShot = currentProjectileSpeed;
 
-        StartCoroutine(ComputeProjectileTrajectory(projectileSpeed, aimingAngle, Physics2D.gravity.y));
+        shootingRoutine = StartCoroutine(ComputeProjectileTrajectory(projectileSpeed, aimingAngle, Physics2D.gravity.y));
     }
 
     void ResetCannonBall()
@@ -160,6 +161,15 @@ public class TankShooting : MonoBehaviour
         }
     }
 
+    void StopShooting()
+    {
+        if (shootingRoutine != null)
+            StopCoroutine(shootingRoutine);
+        shootingRoutine = null;
+        isFiring = false;
+        ResetCannonBall();
+    }
+
     void EnableFiring()
     {
         isFiring = false;
@@ -168,6 +178,17 @@ public class TankShooting : MonoBehaviour
     public void ReEnableFiring()
     {
         Invoke("EnableFiring", firingEnableDelay);
+    }
+
+    public void ResetCannonStatus()
+    {
+        currentProjectileSpeed = minProjectileSpeed;
+        currentAimingAngle = minAimingAngle;
+
+        cannon.rotation = (cannonFacing == CannonFacing.Right) ? Quaternion.Euler(0f, 0f, minAimingAngle) : 
+                                                                Quaternion.Euler(0f, 0f, -minAimingAngle);
+
+        StopShooting();
     }
 
     public bool IsFiring

@@ -34,6 +34,33 @@ public class HUD : MonoBehaviour
             tank.shooting.OnAngleModifierPressed.AddListener(AngleTextColorModifierOnPressed);
             tank.shooting.OnAngleModifierReleased.AddListener(AngleTextColorModifierOnRelease);
         }
+    }
+
+    void OnEnable()
+    {
+        Tank activeTank = GameManager.Instance.ActiveTank;
+        Tank nonActiveTank = GameManager.Instance.NonActiveTank;
+
+        TankShooting activeTankShooting = activeTank.shooting;
+        TankShooting nonActiveTankShooting = nonActiveTank.shooting;
+
+        int activeTankIndex = activeTank.index;
+        int nonActiveTankIndex = nonActiveTank.index;
+        
+        int activeTankSpeedValue = (int)activeTankShooting.CurrentProjectileSpeed;
+        int nonActiveTankSpeedValue = (int)nonActiveTankShooting.CurrentProjectileSpeed;
+
+        int activeTankAngleValue = (int)activeTankShooting.CurrentAimingAngle;
+        int nonActiveTankAngleValue = (int)nonActiveTankShooting.CurrentAimingAngle;
+
+        projectileSpeedTexts[activeTankIndex].text = activeTankSpeedValue.ToString();
+        projectileSpeedTexts[nonActiveTankIndex].text = nonActiveTankSpeedValue.ToString();
+        
+        aimingAngleTexts[activeTankIndex].text = activeTankAngleValue.ToString();
+        aimingAngleTexts[nonActiveTankIndex].text = nonActiveTankAngleValue.ToString();
+
+        scoreTexts[activeTank.index].text = GameManager.Instance.GetPlayerScore(activeTank.index).ToString();
+        scoreTexts[nonActiveTank.index].text = GameManager.Instance.GetPlayerScore(nonActiveTank.index).ToString();
 
         ChangeActivePlayerUI();
     }
@@ -65,16 +92,11 @@ public class HUD : MonoBehaviour
 
     void ChangeActivePlayerUI()
     {
-        Tank[] tanks = GameManager.Instance.Tanks;
         Tank activeTank = GameManager.Instance.ActiveTank;
-        Tank nonActiveTank = tanks[0];
+        Tank nonActiveTank = GameManager.Instance.NonActiveTank;
 
-        foreach (Tank tank in tanks)
-            if (tank.index != activeTank.index)
-                nonActiveTank = tank;
-
-        StartCoroutine(ScaleUIPanel(uiPanels[activeTank.index], true));
-        StartCoroutine(ScaleUIPanel(uiPanels[nonActiveTank.index], false));
+        StartCoroutine(ScaleUIPanel(uiPanels[activeTank.index], enlarge: true));
+        StartCoroutine(ScaleUIPanel(uiPanels[nonActiveTank.index], enlarge: false));
 
         activePlayerPanels[activeTank.index].SetActive(true);
         activePlayerPanels[nonActiveTank.index].SetActive(false);

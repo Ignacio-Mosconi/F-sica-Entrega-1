@@ -25,12 +25,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject tank1;
     [SerializeField] GameObject tank2;
+    [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject hudPanel;
     [SerializeField] float turnDuration = 60.0f;
 
     Camera gameCamera;
     Tank[] tanks = new Tank[2];
     Tank activeTank;
+    Tank nonActiveTank;
     Dictionary<ViewBound, float> viewBounds = new Dictionary<ViewBound, float>();
     float turnTime;
     int[] playerScores = { 0, 0 };
@@ -49,9 +51,7 @@ public class GameManager : MonoBehaviour
             viewBounds.Add(ViewBound.Bottom, gameCamera.ViewportToWorldPoint(new Vector3(0f, 0f, 0f)).y);
             viewBounds.Add(ViewBound.Left, gameCamera.ViewportToWorldPoint(new Vector3(0f, 0f, 0f)).x);
             viewBounds.Add(ViewBound.Right, gameCamera.ViewportToWorldPoint(new Vector3(1f, 0f, 0f)).x);
-
-            turnTime = turnDuration;
-
+            
             enabled = false;
 
             tanks[0].index = 0;
@@ -63,12 +63,10 @@ public class GameManager : MonoBehaviour
             tanks[0].animation = tank1.GetComponent<TankAnimation>();
             tanks[1].animation = tank2.GetComponent<TankAnimation>();
 
-            foreach (Tank tank in tanks)
-            {
-                tank.movement.enabled = false;
-                tank.shooting.enabled = false;
-                tank.animation.enabled = false;
-            }
+            tanks[0].shooting.OnFireFinish.AddListener(ChangeTurns);
+            tanks[1].shooting.OnFireFinish.AddListener(ChangeTurns);
+
+            DisableTanks();
         }
     }
 
@@ -86,27 +84,38 @@ public class GameManager : MonoBehaviour
     {
         turnTime = turnDuration;
 
-        foreach (Tank tank in tanks)
-        {
-            if (!tank.movement.IsRespawning)
-                tank.movement.enabled = !tank.movement.enabled;
-            tank.shooting.enabled = !tank.shooting.enabled;
-            tank.animation.enabled = !tank.animation.enabled;
+        Tank temp = activeTank;
+        activeTank = nonActiveTank;
+        nonActiveTank = temp;
+        
+        nonActiveTank.movement.enabled = false;
+        nonActiveTank.shooting.enabled = false;
+        nonActiveTank.animation.DisableMovementAnimation();
 
-            if (tank.shooting.enabled)
-            {
-                tank.shooting.ReEnableFiring();
-                activeTank = tank;
-            }
-            else
-                tank.animation.DisableMovementAnimation();
-        }
+        if (!activeTank.movement.IsRespawning)
+            activeTank.movement.enabled = true;
+        activeTank.shooting.enabled = true;
+        activeTank.shooting.ReEnableFiring();
 
         onTurnChange.Invoke();
     }
 
+    void DisableTanks()
+    {
+        foreach (Tank tank in tanks)
+        {
+            tank.movement.ResetPosition();
+            tank.shooting.ResetCannonStatus();
+
+            tank.movement.enabled = false;
+            tank.shooting.enabled = false;
+            tank.animation.enabled = false;
+        }
+    }
+
     public void StartGame()
     {
+        turnTime = turnDuration;
         enabled = true;
 
         tanks[0].movement.enabled = true;
@@ -114,34 +123,38 @@ public class GameManager : MonoBehaviour
         tanks[0].shooting.enabled = true;
         tanks[1].shooting.enabled = false;
         tanks[0].animation.enabled = true;
-        tanks[1].animation.enabled = false;
+        tanks[1].animation.enabled = true;
 
         activeTank = tanks[0];
+        nonActiveTank = tanks[1];
+
+        playerScores[0] = 0;
+        playerScores[1] = 0;
 
         hudPanel.SetActive(true);
+    }
 
-        tanks[0].shooting.OnFireFinish.AddListener(ChangeTurns);
-        tanks[1].shooting.OnFireFinish.AddListener(ChangeTurns);
+    public void SetPauseState(bool paused)
+    {
+        hudPanel.SetActive(!paused);
+
+        activeTank.movement.enabled = !paused;
+        activeTank.shooting.enabled = !paused;
+        activeTank.animation.enabled = !paused;
+    }
+
+    public void ExitGame()
+    {
+        enabled = false;
+
+        DisableTanks();
+        hudPanel.SetActive(false);
+        mainMenu.SetActive(true);
     }
 
     public void ExitApplication()
     {
         Application.Quit();
-    }
-
-    public Tank ActiveTank
-    {
-        get { return activeTank; }
-    }
-
-    public float TurnTime
-    {
-        get { return turnTime; }
-    }
-
-    public Tank[] Tanks
-    {
-        get { return tanks; }
     }
 
     public int GetPlayerScore(int index)
@@ -156,13 +169,31 @@ public class GameManager : MonoBehaviour
 
     public void IncreasePlayerScore(float speedAtShot)
     {
-        Tank nonActiveTank = Array.Find(tanks, t => t.index != activeTank.index);
-        
         nonActiveTank.animation.PlayReceiveFire();
         nonActiveTank.movement.Respawn();
-        
+
         playerScores[activeTank.index] += (int)speedAtShot;
         onScoreChange.Invoke();
+    }
+
+    public Tank ActiveTank
+    {
+        get { return activeTank; }
+    }
+
+    public Tank NonActiveTank
+    {
+        get { return nonActiveTank; }
+    }
+
+    public float TurnTime
+    {
+        get { return turnTime; }
+    }
+
+    public Tank[] Tanks
+    {
+        get { return tanks; }
     }
 
     public UnityEvent OnTurnChange

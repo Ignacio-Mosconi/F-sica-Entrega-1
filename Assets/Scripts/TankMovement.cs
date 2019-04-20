@@ -49,7 +49,7 @@ public class TankMovement : MonoBehaviour
         ClampHorizontalPosition();
     }
 
-    void ResetPosition()
+    public void ResetPosition()
     {
         enabled = true;
         isRespawning = false;
@@ -65,6 +65,7 @@ public class TankMovement : MonoBehaviour
     public bool IsMoving
     {
         get { return isMoving; }
+        set { isMoving = value; }
     }
 
     public bool IsRespawning

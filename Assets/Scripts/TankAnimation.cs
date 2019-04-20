@@ -37,6 +37,7 @@ public class TankAnimation : MonoBehaviour
 
     public void DisableMovementAnimation()
     {
+        tankMovement.IsMoving = false;
         tankAnimator.SetBool("Moving", false);
     }
 }
