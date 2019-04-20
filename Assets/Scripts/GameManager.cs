@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject tank1;
     [SerializeField] GameObject tank2;
+    [SerializeField] GameObject hudPanel;
     [SerializeField] float turnDuration = 60.0f;
 
     Camera gameCamera;
@@ -50,7 +51,9 @@ public class GameManager : MonoBehaviour
             viewBounds.Add(ViewBound.Right, gameCamera.ViewportToWorldPoint(new Vector3(1f, 0f, 0f)).x);
 
             turnTime = turnDuration;
-            
+
+            enabled = false;
+
             tanks[0].index = 0;
             tanks[1].index = 1;
             tanks[0].movement = tank1.GetComponent<TankMovement>();
@@ -60,17 +63,12 @@ public class GameManager : MonoBehaviour
             tanks[0].animation = tank1.GetComponent<TankAnimation>();
             tanks[1].animation = tank2.GetComponent<TankAnimation>();
 
-            tanks[0].movement.enabled = true;
-            tanks[1].movement.enabled = false;
-            tanks[0].shooting.enabled = true;
-            tanks[1].shooting.enabled = false;
-            tanks[0].animation.enabled = true;
-            tanks[1].animation.enabled = false;
-
-            activeTank = tanks[0];
-            
-            tanks[0].shooting.OnFireFinish.AddListener(ChangeTurns);
-            tanks[1].shooting.OnFireFinish.AddListener(ChangeTurns);
+            foreach (Tank tank in tanks)
+            {
+                tank.movement.enabled = false;
+                tank.shooting.enabled = false;
+                tank.animation.enabled = false;
+            }
         }
     }
 
@@ -105,6 +103,30 @@ public class GameManager : MonoBehaviour
         }
 
         onTurnChange.Invoke();
+    }
+
+    public void StartGame()
+    {
+        enabled = true;
+
+        tanks[0].movement.enabled = true;
+        tanks[1].movement.enabled = false;
+        tanks[0].shooting.enabled = true;
+        tanks[1].shooting.enabled = false;
+        tanks[0].animation.enabled = true;
+        tanks[1].animation.enabled = false;
+
+        activeTank = tanks[0];
+
+        hudPanel.SetActive(true);
+
+        tanks[0].shooting.OnFireFinish.AddListener(ChangeTurns);
+        tanks[1].shooting.OnFireFinish.AddListener(ChangeTurns);
+    }
+
+    public void ExitApplication()
+    {
+        Application.Quit();
     }
 
     public Tank ActiveTank
